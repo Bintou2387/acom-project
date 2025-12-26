@@ -22,17 +22,18 @@ import { Annonce } from './annonces/entities/annonce.entity';
     }),
     // -----------------------------------------------
 
+    // Connexion Base de Données (NEON.TECH)
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5435, // Vérifiez que c'est bien votre port (souvent 5432, mais gardez 5435 si c'est votre config)
-      username: 'acom_user',
-      password: 'acom_password',
-      database: 'acom_database',
-      autoLoadEntities: true,
-      synchronize: true,
-      dropSchema: false, // <--- ATTENTION : METTEZ FALSE ! Sinon vous perdez vos données et votre rôle Admin à chaque fois.
-      entities: [User, Annonce, Message], // <--- AJOUTEZ MESSAGE ICI !!
+      // Votre lien magique Neon :
+      url: 'postgresql://neondb_owner:npg_kQXMg0vUZ8uP@ep-old-violet-ad2oqkiv-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require',
+      
+      entities: [User, Annonce, Message], 
+      synchronize: true, // Crée les tables automatiquement
+      ssl: true,         // Sécurité obligatoire pour le Cloud
+      extra: {
+        ssl: { rejectUnauthorized: false },
+      },
     }),
     AnnoncesModule,
     UsersModule,
