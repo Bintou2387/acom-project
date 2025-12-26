@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: acom_db
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: acom_user
+      POSTGRES_PASSWORD: acom_password
+      POSTGRES_DB: acom_database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
