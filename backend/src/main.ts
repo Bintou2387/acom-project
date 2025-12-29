@@ -1,13 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { NestExpressApplication } from '@nestjs/platform-express'; // <--- IMPORT
-import { join } from 'path'; // <--- IMPORT
+import { NestExpressApplication } from '@nestjs/platform-express'; 
+import { join } from 'path'; 
 
 async function bootstrap() {
   // On précise <NestExpressApplication> pour avoir accès aux fonctions statiques
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
+  // IMPORTANT : Activer CORS pour que l'app mobile puisse parler au serveur
+  app.enableCors(); 
+
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true })); 
   
   // --- RENDRE LE DOSSIER UPLOADS PUBLIC ---
@@ -16,6 +19,10 @@ async function bootstrap() {
   });
   // ----------------------------------------
 
-  await app.listen(3000, '0.0.0.0');
+  // CORRECTION ICI : On utilise le port de Koyeb (process.env.PORT) sinon 3000
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0');
+  
+  console.log(`L'application tourne sur le port : ${port}`);
 }
 bootstrap();
